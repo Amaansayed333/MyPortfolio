@@ -5,6 +5,12 @@ import CanvasLoader from "../components/CanvasLoader.jsx";
 import {PerspectiveCamera} from "@react-three/drei";
 import {Leva,useControls} from "leva";
 import Target from "../components/Target.jsx";
+import {useMediaQuery} from "react-responsive";
+import {calculateSizes} from "../constants/index.js";
+import Reactlogo from "../components/Reactlogo.jsx";
+import Cube from "../components/Cube.jsx";
+import { EffectComposer, Bloom,Select,Selection } from "@react-three/postprocessing"
+import HeroCamera from "../components/HeroCamera.jsx";
 
 
 const Hero = () => {
@@ -79,6 +85,12 @@ const Hero = () => {
         }
     })
 
+    const isSmall=useMediaQuery({minWidth:320,maxWidth:480})
+    const isMobile=useMediaQuery({maxWidth:768})
+    const isTablet=useMediaQuery({minWidth:768,maxWidth:1024})
+
+    const sizes=calculateSizes(isSmall,isMobile,isTablet)
+
     return (
         <section className="min-h-screen w-full flex flex-col relative">
             <div className="w-full mx-auto flex flex-col sm:mt-36 mt-20 gap-3">
@@ -92,18 +104,35 @@ const Hero = () => {
                 <Canvas className="w-full h-full">
                     <Suspense fallback={<CanvasLoader></CanvasLoader>}>
                         <PerspectiveCamera makeDefault position={[0,0,30]}></PerspectiveCamera>
-                        <Hackerroom scale={0.4}
-                                    position={[0,-40,-80]}
-                                    rotation={[controls.rotationX,-160,controls.rotationZ]}>
+                        <Selection>
+                            <HeroCamera>
+                                <Hackerroom scale={isMobile?0.3:0.35}
+                                                position={isMobile?[6,-20,-80]:[0,-35,-80]}
+                                                rotation={[controls.rotationX,-160,controls.rotationZ]}>
 
-                        </Hackerroom>
+                                </Hackerroom>
+                            </HeroCamera>
                         <group>
+                            <Target scale={3} position={[-33,5,-20]}></Target>
+                            <Reactlogo position={[22,5,0]}></Reactlogo>
 
+                                <Select>
+                                    <Cube scale={2} position={[-22,-9,-1]}></Cube>
+                                </Select>
 
                         </group>
 
                         <ambientLight intensity={1}></ambientLight>
                         <directionalLight position={[0,0,5]} intensity={1} castShadow></directionalLight>
+                        </Selection>
+                        <EffectComposer>
+                            <Bloom
+                                intensity={2}           // glow strength
+                                luminanceThreshold={0.1}  // what counts as "bright"
+                                luminanceSmoothing={0.9}  // smooth edges
+                                height={300}
+                            />
+                        </EffectComposer>
                     </Suspense>
 
                 </Canvas>
@@ -113,3 +142,7 @@ const Hero = () => {
 }
 
 export default Hero
+
+//scale={0.4}
+//position={[0,-40,-80]}
+//rotation={[controls.rotationX,-160,controls.rotationZ]}

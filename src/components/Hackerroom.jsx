@@ -7,10 +7,12 @@ Title: Hacker Room - Stylized
 */
 
 import React from 'react'
-import { useGLTF } from '@react-three/drei'
+import { useGLTF,useTexture } from '@react-three/drei'
 
 const Hackerroom=(props)=> {
     const { nodes, materials } = useGLTF('/models/myhacker_room.glb')
+
+
     return (
         <group {...props} dispose={null}>
             <mesh
@@ -18,7 +20,9 @@ const Hackerroom=(props)=> {
                 receiveShadow
                 geometry={nodes.computer_computer_mat_0.geometry}
                 material={materials.computer_mat}
-            />
+            >
+
+            </mesh>
             <mesh
                 castShadow
                 receiveShadow
@@ -78,7 +82,9 @@ const Hackerroom=(props)=> {
                 receiveShadow
                 geometry={nodes.screen_screens_0.geometry}
                 material={materials.screens}
-            />
+            >
+
+            </mesh>
             <mesh
                 castShadow
                 receiveShadow

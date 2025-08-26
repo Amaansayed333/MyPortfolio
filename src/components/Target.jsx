@@ -9,23 +9,20 @@ const Target = (props) => {
     );
     const targetref = useRef();
 
-    useGSAP(() => {
-        gsap.to(targetref.current.position, {
-            x: targetref.current.position.x + 2,
-            y: targetref.current.position.y + 2.8,
-            duration: 1.5,
-            repeat: -1,
-            yoyo: true,
-            ease: "power1.inOut",
-        });
-    });
+    useGSAP(()=>{
+        gsap.to(targetref.current.position,{
+            y:targetref.current.position.y+3,
+            duration:1.5,
+            yoyo:true,
+            repeat:-1,
+            ease:"power1.inOut",
+        })
+    })
 
     return (
-        <group {...props}>   {/* Leva moves this */}
-            <group ref={targetref}>  {/* GSAP animates this */}
-                <primitive object={scene} />
-            </group>
-        </group>
+        <mesh {...props} ref={targetref} >
+            <primitive object={scene}></primitive>
+        </mesh>
     );
 
 
