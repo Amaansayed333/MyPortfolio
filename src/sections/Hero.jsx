@@ -11,6 +11,7 @@ import Reactlogo from "../components/Reactlogo.jsx";
 import Cube from "../components/Cube.jsx";
 import { EffectComposer, Bloom,Select,Selection } from "@react-three/postprocessing"
 import HeroCamera from "../components/HeroCamera.jsx";
+import Button from "../components/Button.jsx";
 
 
 const Hero = () => {
@@ -89,7 +90,7 @@ const Hero = () => {
     const isMobile=useMediaQuery({maxWidth:768})
     const isTablet=useMediaQuery({minWidth:768,maxWidth:1024})
 
-    const sizes=calculateSizes(isSmall,isMobile,isTablet)
+
 
     return (
         <section className="min-h-screen w-full flex flex-col relative">
@@ -136,6 +137,11 @@ const Hero = () => {
                     </Suspense>
 
                 </Canvas>
+            </div>
+            <div className="absolute bottom-7 right-0 left-0 z-7 w-full">
+                <a href="#contact" className="w-fit">
+                    <Button name="LETS BUILD" containerClass="sm:w-fit w-full sm:min-w-96" isBeam></Button>
+                </a>
             </div>
         </section>
     )
