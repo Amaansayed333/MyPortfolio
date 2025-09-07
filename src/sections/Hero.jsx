@@ -6,12 +6,16 @@ import {PerspectiveCamera} from "@react-three/drei";
 import {Leva,useControls} from "leva";
 import Target from "../components/Target.jsx";
 import {useMediaQuery} from "react-responsive";
-import {calculateSizes} from "../constants/index.js";
 import Reactlogo from "../components/Reactlogo.jsx";
 import Cube from "../components/Cube.jsx";
 import { EffectComposer, Bloom,Select,Selection } from "@react-three/postprocessing"
 import HeroCamera from "../components/HeroCamera.jsx";
 import Button from "../components/Button.jsx";
+import Hologram from "../components/Hologram.jsx"
+
+import GlowingDotGlobe2 from "../components/Cyberpunkbackground.jsx";
+import Scifione from "../components/Scifione.jsx";
+import VoidSphere from "../components/VoidSphere.jsx";
 
 
 const Hero = () => {
@@ -86,11 +90,28 @@ const Hero = () => {
         }
     })
 
+    // Add controls for the VoidSphere
+    const voidControls = useControls('VoidSphere', {
+        radius: {
+            value: 12,
+            min: 5,
+            max: 25
+        },
+        borderWidth: {
+            value: 0.3,
+            min: 0.1,
+            max: 1
+        },
+        opacity: {
+            value: 0.1,
+            min: 0,
+            max: 1
+        }
+    })
+
     const isSmall=useMediaQuery({minWidth:320,maxWidth:480})
     const isMobile=useMediaQuery({maxWidth:768})
     const isTablet=useMediaQuery({minWidth:768,maxWidth:1024})
-
-
 
     return (
         <section className="min-h-screen w-full flex flex-col relative">
@@ -105,27 +126,36 @@ const Hero = () => {
                 <Canvas className="w-full h-full">
                     <Suspense fallback={<CanvasLoader></CanvasLoader>}>
                         <PerspectiveCamera makeDefault position={[0,0,30]}></PerspectiveCamera>
-                        <Selection>
-                            <HeroCamera>
-                                <Hackerroom scale={isMobile?0.3:0.35}
-                                                position={isMobile?[6,-20,-80]:[0,-35,-80]}
-                                                rotation={[controls.rotationX,-160,controls.rotationZ]}>
 
-                                </Hackerroom>
-                            </HeroCamera>
-                        <group>
-                            <Target scale={3} position={[-33,5,-20]}></Target>
-                            <Reactlogo position={[22,5,0]}></Reactlogo>
+                        {/* Galaxy background - will be blocked by VoidSphere */}
+                        <GlowingDotGlobe2 scale={5}></GlowingDotGlobe2>
+
+                        <Selection>
+                            <ambientLight intensity={0.1} position={[0,-10,-30]} color={"#2ae3c5"}></ambientLight>
+
+                            {/* Protected area with VoidSphere around Scifione */}
+                            <group>
+                                <VoidSphere position={[0,-6.6,-22]} scale={1.2}></VoidSphere>
+
+                                {/* Your character inside the protective sphere */}
+                                <Scifione scale={7} position={[0,-10.3,0]}></Scifione>
+                            </group>
+
+                            <Hologram position={[6.2,-2.2,14]} fontSize={1} frameWidth={7}></Hologram>
+
+                            <group>
+                                <Target scale={3} position={[-33,5,-20]}></Target>
+                                <Reactlogo position={[22,5,0]}></Reactlogo>
 
                                 <Select>
                                     <Cube scale={2} position={[-22,-9,-1]}></Cube>
                                 </Select>
+                            </group>
 
-                        </group>
-
-                        <ambientLight intensity={1}></ambientLight>
-                        <directionalLight position={[0,0,5]} intensity={1} castShadow></directionalLight>
+                            <ambientLight intensity={1.5}></ambientLight>
+                            <directionalLight position={[0,0,5]} intensity={0.3} castShadow></directionalLight>
                         </Selection>
+
                         <EffectComposer>
                             <Bloom
                                 intensity={2}           // glow strength
@@ -135,7 +165,6 @@ const Hero = () => {
                             />
                         </EffectComposer>
                     </Suspense>
-
                 </Canvas>
             </div>
             <div className="absolute bottom-7 right-0 left-0 z-7 w-full">
@@ -148,7 +177,3 @@ const Hero = () => {
 }
 
 export default Hero
-
-//scale={0.4}
-//position={[0,-40,-80]}
-//rotation={[controls.rotationX,-160,controls.rotationZ]}

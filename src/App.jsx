@@ -5,7 +5,7 @@ import About from "./sections/About"
 
 const App=()=>{
     return(
-        <main className="max-w-7xl mx-auto">
+        <main className="max-w mx-auto">
             <Navbar></Navbar>
             <Hero></Hero>
             <About></About>
